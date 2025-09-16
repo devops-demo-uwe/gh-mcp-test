@@ -51,26 +51,26 @@ Bug Issues:
 ### Branch Creation Rules
 ```
 ALWAYS create branches through GitHub MCP:
-- Feature branches: "feature/brief-description-max-3-words"
+- Feature branches: "feature/issue-number-brief-description"
 - Bug fix branches: "bugfix/issue-number-brief-description"
-- Example: "Create branch 'feature/user-authentication' from main for issue #23"
+- Example: "Create branch 'feature/23-user-authentication' from main for issue #23"
 ```
 
 ### Branch Naming Convention
-- Features: `feature/user-dashboard`, `feature/api-authentication`
+- Features: `feature/45-user-dashboard`, `feature/23-api-authentication`
 - Bug fixes: `bugfix/42-login-validation`, `bugfix/15-memory-leak`
-- Hotfixes: `hotfix/critical-security-patch`
+- Hotfixes: `hotfix/99-critical-security-patch` (with associated issue number)
 
 ## 3. Development Workflow (GitHub MCP)
 
 ### Starting New Work
 ```
 Complete workflow command:
-"Create issue for [feature/bug description], then create branch [branch-name] from main"
+"Create issue for [feature/bug description], then create branch [issue-number-branch-name] from main"
 
 This should:
 1. Create properly formatted GitHub issue
-2. Create branch linked to the issue
+2. Create branch with issue number prefix linked to the issue
 3. Confirm issue number for future commit references
 ```
 
@@ -119,7 +119,7 @@ When development is complete:
 "Create pull request for current branch targeting main branch for issue #[number]"
 
 Auto-populate with:
-- Title matching the issue title
+- Title format: "#[issue-number]: [Issue title]" 
 - Description linking to the issue
 - Proper labels and reviewers
 ```
@@ -179,14 +179,14 @@ Before merging:
    "Create feature issue for user dashboard with analytics widgets"
 
 2. Branch Creation:  
-   "Create feature branch 'feature/user-dashboard' from main for issue #45"
+   "Create feature branch 'feature/45-user-dashboard' from main for issue #45"
 
 3. Development Iterations:
    "Push current changes with commit: 'feat(dashboard): add widget framework - addresses #45'"
    "Push current changes with commit: 'feat(dashboard): implement analytics data - addresses #45'"
 
 4. Pull Request:
-   "Create pull request for feature/user-dashboard targeting main for issue #45"
+   "Create pull request for feature/45-user-dashboard targeting main for issue #45"
 
 5. Review and Merge:
    "Merge pull request #12 after all approvals and checks pass"
@@ -217,7 +217,7 @@ Before merging:
 ### Critical Production Issues
 ```
 For production emergencies:
-1. "Create hotfix branch 'hotfix/critical-security-patch' from main"
+1. "Create hotfix branch 'hotfix/99-critical-security-patch' from main"
 2. "Push fix with commit: 'fix(security): patch XSS vulnerability - addresses #99'"
 3. "Create urgent pull request for hotfix branch with immediate review requested"
 4. After merge: "Create issue to backport hotfix to development branches"
