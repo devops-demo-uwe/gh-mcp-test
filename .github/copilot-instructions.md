@@ -431,3 +431,39 @@ Conflict resolution:
 - **Clean commits**: Use staging area for atomic, well-described commits  
 - **Proper linking**: Every commit references GitHub issue
 - **Safe merging**: Check for conflicts before creating PRs
+
+
+# Code Generation Guidelines
+
+## Default Behavior
+- **ALWAYS start with the absolute minimum viable implementation**
+- Generate ONLY what is explicitly requested
+- Do not add error handling, logging, or validation unless specifically asked
+- Do not add "helpful" additional methods or properties
+- Do not implement edge cases unless mentioned
+- Stop at basic structure when asked for "scaffolding" or "boilerplate"
+
+## Implementation Levels
+When I say "basic structure" or "skeleton" or "scaffold":
+- Create empty methods with appropriate signatures
+- Add minimal property declarations
+- Include only required imports
+- NO implementation details
+- NO example usage
+- NO additional features
+
+When I say "minimal implementation":
+- Add the simplest possible working code
+- Use placeholder values where appropriate
+- Avoid libraries and dependencies unless specified
+- No optimization or best practices unless asked
+
+## Explicit Escalation Required
+Only add these when EXPLICITLY requested:
+- Error handling and validation
+- Logging and monitoring
+- Configuration and environment handling
+- Additional helper methods
+- Code comments and documentation
+- Type safety beyond basic types
+- Performance optimizations
