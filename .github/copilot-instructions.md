@@ -260,8 +260,11 @@ Review Feedback:
 ### Branch Cleanup
 ```
 After successful merge:
+1. Switch back to main branch locally for future work
+2. Pull latest changes to update local main branch
+
 ⚠️ **Note**: GitHub MCP currently does not support automatic branch deletion.
-After merging a PR, manually delete the feature branch through GitHub UI:
+After merging a PR, notify the user that they can manually delete the feature branch through GitHub UI:
 1. Go to repository → Branches tab
 2. Find the merged branch
 3. Click the delete (trash) icon
@@ -287,5 +290,9 @@ Handle feedback:
 
 Complete work:
 "Merge PR #[number] after approval"
+
+Post-merge cleanup:
+1. Switch to main branch locally
+2. Pull latest changes
 ⚠️ **Manual step**: Delete merged branch through GitHub UI (Branches tab → delete icon)
 ```
