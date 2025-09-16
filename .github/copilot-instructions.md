@@ -14,13 +14,40 @@ This is a demo repository for testing GitHub Copilot functionality.
 - Prefer explicit over implicit code
 - Include error handling where appropriate
 
-# Standard Feature and Bugfix GitHub Workflow Instructions
+# Complete Git + GitHub Workflow Instructions with Full MCP Integration
+
+## MCP Server Configuration Required
+
+### Git MCP Server (CyanHeads - Comprehensive)
+```json
+{
+  "mcp": {
+    "servers": {
+      "git": {
+        "command": "npx",
+        "args": ["@cyanheads/git-mcp-server"],
+        "env": {
+          "MCP_LOG_LEVEL": "info"
+        }
+      },
+      "github": {
+        "type": "http",
+        "url": "https://api.githubcopilot.com/mcp/",
+        "headers": {
+          "Authorization": "Bearer ${input:github_mcp_pat}"
+        }
+      }
+    }
+  }
+}
+```
 
 ## Core Workflow Principles
 - ALWAYS follow the complete issue → branch → commits → PR → merge cycle
-- ALWAYS use GitHub MCP for ALL operations (both local and remote)
+- ALWAYS use Git MCP for local operations (pull, fetch, commit, branch, merge, status, diff)
+- ALWAYS use GitHub MCP for remote operations (issues, PRs, repository management)
 - NEVER use terminal commands for git or gh operations
-- ALWAYS maintain clean, traceable development history
+- ALWAYS maintain clean, traceable development history with proper remote sync
 - ALWAYS link all work to GitHub issues for proper tracking
 
 ## 1. Issue Management (GitHub MCP)
@@ -46,14 +73,27 @@ Bug Issues:
 - Body: Steps to reproduce, expected vs actual behavior, environment details
 ```
 
-## 2. Branch Management (GitHub MCP)
+## 2. Repository Sync and Branch Management (Git MCP + GitHub MCP)
 
-### Branch Creation Rules
+### Starting New Work with Proper Sync
 ```
-ALWAYS create branches through GitHub MCP:
-- Feature branches: "feature/issue-number-brief-description"
-- Bug fix branches: "bugfix/issue-number-brief-description"
-- Example: "Create branch 'feature/23-user-authentication' from main for issue #23"
+Complete workflow with sync:
+"Pull latest changes from origin main, create issue for [feature/bug description], then create branch [issue-number-branch-name] from updated main"
+
+This should:
+1. Use git_pull to sync main branch with remote changes
+2. Create properly formatted GitHub issue (GitHub MCP)
+3. Create branch with issue number prefix from up-to-date main (git_checkout with create)
+4. Confirm issue number for future commit references
+```
+
+### Branch Creation and Management (Git MCP)
+```
+Branch Operations:
+- "Create and checkout branch 'feature/23-user-auth' from main"
+- "Switch to branch [branch-name]"
+- "List all branches including remote branches"
+- "Merge main into current branch to sync with latest changes"
 ```
 
 ### Branch Naming Convention
@@ -61,28 +101,28 @@ ALWAYS create branches through GitHub MCP:
 - Bug fixes: `bugfix/42-login-validation`, `bugfix/15-memory-leak`
 - Hotfixes: `hotfix/99-critical-security-patch` (with associated issue number)
 
-## 3. Development Workflow (GitHub MCP)
-
-### Starting New Work
-```
-Complete workflow command:
-"Create issue for [feature/bug description], then create branch [issue-number-branch-name] from main"
-
-This should:
-1. Create properly formatted GitHub issue
-2. Create branch with issue number prefix linked to the issue
-3. Confirm issue number for future commit references
-```
+## 3. Development Workflow (Git MCP)
 
 ### File Modification and Commits
 ```
 When making changes:
-1. Modify files in VS Code normally
-2. When ready to commit: "Push changes to current branch with commit message: [proper format]"
-3. GitHub MCP handles: staging, committing, and pushing in one operation
+1. Check status: "Show git status to see what files have changed"
+2. Review changes: "Show diff of modified files"
+3. Stage selectively: "Stage files [file1] [file2] for commit"
+4. Commit with message: "Commit staged changes with message: [proper format]"
+5. Push when ready: "Push current branch to origin"
 ```
 
-## 4. Commit Message Standards (GitHub MCP)
+### Keeping Branch Updated
+```
+Regular sync operations:
+- "Fetch latest changes from origin"
+- "Pull latest changes into main branch"
+- "Merge main into current feature branch"
+- "Check if current branch is behind origin"
+```
+
+## 4. Commit Message Standards (Git MCP)
 
 ### Required Commit Message Format
 ```
@@ -116,12 +156,22 @@ Examples:
 ### Creating Pull Requests
 ```
 When development is complete:
-"Create pull request for current branch targeting main branch for issue #[number]"
+1. "Push current branch to origin" (Git MCP)
+2. "Create pull request for current branch targeting main branch for issue #[number]" (GitHub MCP)
 
 Auto-populate with:
 - Title format: "#[issue-number]: [Issue title]" 
 - Description linking to the issue
 - Proper labels and reviewers
+```
+
+### Before Creating PR
+```
+Pre-PR checklist (Git MCP):
+- "Check git status to ensure all changes are committed"
+- "Fetch and check if main has new changes"
+- "Merge main into current branch if needed"
+- "Push current branch to origin"
 ```
 
 ### PR Template Requirements
@@ -150,15 +200,24 @@ Brief overview of changes and approach taken
 - [ ] Breaking changes documented below
 ```
 
-## 6. Code Review and Merge Process (GitHub MCP)
+## 6. Code Review and Merge Process (GitHub MCP + Git MCP)
 
-### Review Assignment
+### Review Assignment (GitHub MCP)
 ```
 Auto-assign reviewers based on:
 - CODEOWNERS file mappings
 - Component expertise
 - Workload distribution
 - At least 1 reviewer required, 2 for critical changes
+```
+
+### Handling Review Feedback
+```
+After receiving feedback:
+1. "Switch to branch [branch-name]" (Git MCP)
+2. Make requested changes in VS Code
+3. "Stage and commit changes with message: 'fix([scope]): address review feedback - addresses #[issue]'" (Git MCP)
+4. "Push current branch to origin" (Git MCP)
 ```
 
 ### Merge Requirements
@@ -175,17 +234,20 @@ Before merging:
 
 ### Complete Feature Process
 ```
-1. Issue Creation:
-   "Create feature issue for user dashboard with analytics widgets"
+1. Sync and Issue Creation:
+   "Pull latest changes from main, create feature issue for user dashboard with analytics widgets"
 
 2. Branch Creation:  
-   "Create feature branch 'feature/45-user-dashboard' from main for issue #45"
+   "Create and checkout feature branch 'feature/45-user-dashboard' from main for issue #45"
 
-3. Development Iterations:
-   "Push current changes with commit: 'feat(dashboard): add widget framework - addresses #45'"
-   "Push current changes with commit: 'feat(dashboard): implement analytics data - addresses #45'"
+3. Development with Regular Sync:
+   "Show git status and stage authentication files"
+   "Commit with message: 'feat(dashboard): add widget framework - addresses #45'"
+   "Fetch origin and merge main if there are updates"
+   "Commit with message: 'feat(dashboard): implement analytics data - addresses #45'"
 
-4. Pull Request:
+4. Push and PR:
+   "Push current branch to origin"
    "Create pull request for feature/45-user-dashboard targeting main for issue #45"
 
 5. Review and Merge:
@@ -196,16 +258,18 @@ Before merging:
 
 ### Complete Bugfix Process
 ```
-1. Bug Issue Creation:
-   "Create bug issue for login session timeout occurring after 10 minutes"
+1. Sync and Bug Issue Creation:
+   "Pull latest changes from main, create bug issue for login session timeout occurring after 10 minutes"
 
 2. Branch Creation:
-   "Create bugfix branch 'bugfix/67-session-timeout' from main for issue #67"
+   "Create and checkout bugfix branch 'bugfix/67-session-timeout' from main for issue #67"
 
 3. Investigation and Fix:
-   "Push current changes with commit: 'fix(auth): extend session timeout to 30 minutes - addresses #67'"
+   "Show git status and diff to understand current changes"
+   "Stage modified auth files and commit: 'fix(auth): extend session timeout to 30 minutes - addresses #67'"
 
-4. Pull Request:
+4. Push and PR:
+   "Push current branch to origin"
    "Create pull request for bugfix/67-session-timeout targeting main for issue #67"
 
 5. Priority Review and Merge:
@@ -217,82 +281,153 @@ Before merging:
 ### Critical Production Issues
 ```
 For production emergencies:
-1. "Create hotfix branch 'hotfix/99-critical-security-patch' from main"
-2. "Push fix with commit: 'fix(security): patch XSS vulnerability - addresses #99'"
-3. "Create urgent pull request for hotfix branch with immediate review requested"
-4. After merge: "Create issue to backport hotfix to development branches"
+1. "Pull latest changes from main"
+2. "Create and checkout hotfix branch 'hotfix/99-critical-security-patch' from main"
+3. "Stage security files and commit: 'fix(security): patch XSS vulnerability - addresses #99'"
+4. "Push hotfix branch to origin"
+5. "Create urgent pull request for hotfix branch with immediate review requested"
+6. After merge: "Pull main and create issue to backport hotfix to development branches"
 ```
 
-## 10. Quality Gates and Automation
+## 10. Advanced Git Operations (Git MCP)
 
-### Pre-Commit Checks
+### Handling Conflicts and Complex Scenarios
 ```
-Before each commit, GitHub MCP should verify:
-- Commit message follows proper format
-- Issue number exists and is valid
-- No obvious syntax errors in changed files
-- Changes align with issue description
+Merge Conflicts:
+1. "Fetch latest changes from origin"
+2. "Merge main into current branch"
+3. Resolve conflicts in VS Code
+4. "Stage resolved files and commit merge"
+
+Branch Management:
+- "Show all branches including remote branches"
+- "Delete local branch [branch-name]" (after merge)
+- "Prune remote tracking branches"
+
+History and Analysis:
+- "Show commit log for current branch"
+- "Show detailed commit history with diffs"
+- "Show git blame for [filename]"
 ```
 
-### Pre-PR Checks  
+### Stashing and Temporary Changes
+```
+When switching contexts:
+- "Stash current changes with message: 'WIP: authentication work'"
+- "Switch to branch [other-branch]"
+- "List all stashes"
+- "Apply stash and continue work"
+```
+
+## 11. Quality Gates and Automation
+
+### Pre-Commit Checks (Git MCP)
+```
+Before each commit:
+- "Show git status to review changes"
+- "Show diff of staged changes"
+- Verify commit message follows proper format
+- Ensure issue number exists and is valid
+- Check no obvious syntax errors in changed files
+```
+
+### Pre-PR Checks (Git MCP + GitHub MCP)
 ```
 Before creating pull requests:
-- All commits properly formatted and linked
-- Branch name matches convention
-- No merge conflicts with target branch
-- Issue requirements are addressed
+- "Fetch origin and check if main has updates"
+- "Merge main into current branch if needed"
+- "Show commit log to verify all commits properly formatted"
+- "Push current branch to origin"
+- Check branch name matches convention
+- Verify issue requirements are addressed
 ```
 
-## 11. Error Handling and Recovery
+## 12. Error Handling and Recovery
 
 ### Common Scenarios
 ```
-Merge Conflicts:
-"Resolve merge conflicts in [branch-name] with main and update PR"
+Sync Issues:
+"Fetch origin and show status of current branch vs remote"
 
-Failed CI Checks:
-"Investigate failed checks in PR #[number] and push fixes"
+Failed Merges:
+"Show merge conflicts and help resolve them step by step"
 
-Review Feedback:
-"Address review comments in PR #[number] with additional commits"
+Lost Changes:
+"Show reflog to find lost commits"
+"Show stash list to recover temporary changes"
+
+Remote Issues:
+"Show remote repositories and their URLs"
+"Fetch all remotes and show tracking status"
 ```
 
-### Branch Cleanup
+### Branch Cleanup (Git MCP)
 ```
-After successful merge:
-1. Switch back to main branch locally for future work
-2. Pull latest changes to update local main branch
+After successful PR merge:
+1. "Switch to main branch"
+2. "Pull latest changes from origin main"
+3. "Delete local feature branch [branch-name]"
+4. "Prune remote tracking branches"
 
-⚠️ **Note**: GitHub MCP currently does not support automatic branch deletion.
-After merging a PR, notify the user that they can manually delete the feature branch through GitHub UI:
-1. Go to repository → Branches tab
-2. Find the merged branch
-3. Click the delete (trash) icon
-
-Issue will be automatically closed when PR is merged if properly linked.
+✅ **Full cleanup capability**: Git MCP can handle complete branch lifecycle
 ```
 
-## 12. Workflow Commands Reference
+## 13. Workflow Commands Reference
 
 ### Daily Development Commands
 ```
-Start new feature:
-"Create feature issue and branch for [description]"
+Start new work:
+"Pull main, create issue and feature branch for [description]"
+
+Check status:
+"Show git status and any uncommitted changes"
 
 Save progress:
-"Push changes with commit: '[type](scope): [description] - addresses #[issue]'"
+"Stage [files] and commit: '[type](scope): [description] - addresses #[issue]'"
+
+Sync with team:
+"Fetch origin, merge main into current branch if needed"
 
 Create PR:
-"Create pull request for current branch with issue #[number]"
+"Push current branch and create pull request for issue #[number]"
 
 Handle feedback:
-"Push review fixes with commit: 'fix([scope]): address review feedback - addresses #[issue]'"
+"Stage changes and commit: 'fix([scope]): address review feedback - addresses #[issue]'"
 
 Complete work:
-"Merge PR #[number] after approval"
-
-Post-merge cleanup:
-1. Switch to main branch locally
-2. Pull latest changes
-⚠️ **Manual step**: Delete merged branch through GitHub UI (Branches tab → delete icon)
+"Merge PR #[number], switch to main, pull latest, delete feature branch"
 ```
+
+### Advanced Operations
+```
+Branch management:
+"Show all branches and their tracking status"
+"Create branch [name] from [source-branch]"
+"Delete merged branch [name]"
+
+History analysis:
+"Show commit history for [branch/file]"
+"Show detailed diff between [branch1] and [branch2]"
+"Show who last modified lines in [file]"
+
+Conflict resolution:
+"Show merge conflicts and guide me through resolution"
+"Stage resolved files and complete merge"
+```
+
+## 14. Integration Benefits
+
+### Git MCP + GitHub MCP Advantages
+- **Complete workflow coverage**: From local Git to GitHub operations
+- **Natural language interface**: No need to remember Git commands
+- **Proper synchronization**: Full fetch/pull/push capabilities
+- **Team collaboration**: Handle merge conflicts and branch updates
+- **Quality gates**: Built-in checks before commits and PRs
+- **Error recovery**: Comprehensive stash, reflog, and conflict resolution
+
+### Best Practices
+- **Always sync before starting work**: Pull main before creating branches
+- **Regular updates**: Fetch and merge main into feature branches
+- **Clean commits**: Use staging area for atomic, well-described commits  
+- **Proper linking**: Every commit references GitHub issue
+- **Safe merging**: Check for conflicts before creating PRs
